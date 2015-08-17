@@ -67,9 +67,6 @@ def decode(f):
                     tracks=[Track(id, name, steps)
                             for id, name, steps in tracks])
 
-def _trimright(string):
-    return string.rstrip('\0')
-
 def _header(f):
     headerstruct = ('>' '6s' 'q' '32s')
 
@@ -89,9 +86,6 @@ def _body(f, size):
 def _track(f):
     id, name = _trackheader(f)
     steps = _trackbody(f)
-
-    steps_ = ''.join('x' if step else '-' for step in steps)
-
     return (id, name, steps)
 
 def _trackheader(f):
@@ -116,4 +110,5 @@ def _chunked(size, sliceable):
         offset = i * size
         yield tuple(sliceable[offset:offset+size])
 
-
+def _trimright(string):
+    return string.rstrip('\0')
